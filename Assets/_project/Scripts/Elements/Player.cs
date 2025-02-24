@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ public class Player : MonoBehaviour
 
     public Rigidbody rb;
     public Transform cameraHolder;
+    public Transform cameraTransform;
 
     public float cameraSmoothTime;
 
@@ -19,6 +21,12 @@ public class Player : MonoBehaviour
 
     public float jumpPower;
     public LayerMask jumpLayerMask;
+
+    public void RestartPlayer()
+    {
+        gameObject.SetActive(true);
+        transform.position = Vector3.zero;
+    }
 
     private void Start()
     {
@@ -74,7 +82,7 @@ public class Player : MonoBehaviour
         }
         else if (controlStyle == ControlStyle.ThirdPerson)
         {
-            turn.x += Input.GetAxis("Mouse X");
+            turn.x += Input.GetAxis("Mouse X"); 
             turn.y += Input.GetAxis("Mouse Y");
 
             transform.rotation = Quaternion.Euler(0, turn.x * sensitivity, 0);
@@ -111,19 +119,18 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Collectable"))
-        {
-            other.gameObject.SetActive(false);
-        }
-    }
-
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
             gameObject.SetActive(false);
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Collectable"))
+        {
+            other.gameObject.SetActive(false);
         }
     }
 }

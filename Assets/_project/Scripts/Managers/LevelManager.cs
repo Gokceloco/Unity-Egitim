@@ -9,6 +9,7 @@ public class LevelManager : MonoBehaviour
     {
         _currentLevel = Instantiate(level1);
         _currentLevel.transform.position = Vector3.zero;
+        _currentLevel.StartLevel();
     }
 
     public void DeleteCurrentLevel()

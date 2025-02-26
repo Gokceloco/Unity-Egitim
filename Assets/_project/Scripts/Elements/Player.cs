@@ -1,3 +1,5 @@
+using DG.Tweening;
+using System;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -22,6 +24,9 @@ public class Player : MonoBehaviour
     public float jumpPower;
     public LayerMask jumpLayerMask;
 
+    float _tempSpeed;
+    private bool _isCrouching;
+
     public void RestartPlayer()
     {
         gameObject.SetActive(true);
@@ -45,6 +50,17 @@ public class Player : MonoBehaviour
                 rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpPower, rb.linearVelocity.z);
             }
         }
+        if (Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            StartCrouch();
+            _isCrouching = true;
+            _tempSpeed = speed / 2f;
+        }
+        if (Input.GetKeyUp(KeyCode.LeftControl))
+        {
+            _isCrouching = false;
+            StopCrouch();
+        }
     }
 
     void FixedUpdate()
@@ -53,11 +69,11 @@ public class Player : MonoBehaviour
         {
             Vector3 direction = Vector3.zero;
 
-            float tempSpeed = speed;
+            _tempSpeed = speed;
 
             if (Input.GetKey(KeyCode.LeftShift))
             {
-                tempSpeed = speed * 2;
+                _tempSpeed = speed * 2;
             }
             if (Input.GetKey(KeyCode.W))
             {
@@ -76,7 +92,7 @@ public class Player : MonoBehaviour
                 direction += Vector3.right;
             }
 
-            rb.position += direction.normalized * tempSpeed * Time.fixedDeltaTime;
+            rb.position += direction.normalized * _tempSpeed * Time.fixedDeltaTime;
             cameraHolder.position = Vector3.SmoothDamp(cameraHolder.position,
                 transform.position, ref velocity, cameraSmoothTime);
         }
@@ -90,11 +106,15 @@ public class Player : MonoBehaviour
 
             Vector3 direction = Vector3.zero;
 
-            float tempSpeed = speed;
+
+            if (!_isCrouching)
+            {
+                _tempSpeed = speed;
+            }
 
             if (Input.GetKey(KeyCode.LeftShift))
             {
-                tempSpeed = speed * 2;
+                _tempSpeed = speed * 2;
             }
             if (Input.GetKey(KeyCode.W))
             {
@@ -113,10 +133,21 @@ public class Player : MonoBehaviour
                 direction += transform.right;
             }
 
-            rb.position += direction.normalized * tempSpeed * Time.fixedDeltaTime;
+            rb.position += direction.normalized * _tempSpeed * Time.fixedDeltaTime;
             cameraHolder.position = Vector3.SmoothDamp(cameraHolder.position,
                 transform.position, ref velocity, cameraSmoothTime);
         }
+    }
+    private void StartCrouch()
+    {
+        transform.DOKill();
+        transform.DOScaleY(.5f, .3f);
+    }
+
+    private void StopCrouch()
+    {
+        transform.DOKill();
+        transform.DOScaleY(1, .3f);
     }
 
     private void OnCollisionEnter(Collision collision)

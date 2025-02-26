@@ -1,16 +1,16 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Level : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public void StartLevel()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        var collectables = GetComponentsInChildren<Collectable>();
+        for (int i = 0; i < collectables.Length; i++)
+        {
+            collectables[i].StartCollectable(i * .1f);
+        }
     }
 }

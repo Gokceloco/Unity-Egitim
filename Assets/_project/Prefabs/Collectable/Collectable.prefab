@@ -68,6 +68,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bonusAmount: 2
+  rotationSpeed: 10
 --- !u!1 &6927856560467209601
 GameObject:
   m_ObjectHideFlags: 0

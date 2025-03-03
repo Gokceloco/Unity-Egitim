@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 40f7ec9dfce4901459b19d3e312514aa
+timeCreated: 1441129537
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 45175
+  packageName: Cargo container
+  packageVersion: 1.0
+  assetPath: Assets/Container/model/Materials/Noneao.mat
+  uploadId: 79550

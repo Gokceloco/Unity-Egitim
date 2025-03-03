@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 609184d6771f4af4f8e22cb6b5fdfc79
+timeCreated: 1441126705
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 45175
+  packageName: Cargo container
+  packageVersion: 1.0
+  assetPath: Assets/Container/model/Materials/Container_green.mat
+  uploadId: 79550

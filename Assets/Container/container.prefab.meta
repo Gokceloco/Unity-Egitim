@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 901ae8854cc08bc439e479df2cb778a0
+timeCreated: 1441128380
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 45175
+  packageName: Cargo container
+  packageVersion: 1.0
+  assetPath: Assets/Container/container.prefab
+  uploadId: 79550

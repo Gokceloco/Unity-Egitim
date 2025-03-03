@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 669fb6414e52fac4585d71786c1587da
+timeCreated: 1441127147
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 45175
+  packageName: Cargo container
+  packageVersion: 1.0
+  assetPath: Assets/Container/container_demo.unity
+  uploadId: 79550

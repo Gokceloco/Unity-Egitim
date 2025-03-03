@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 6b3987d828d7bb84c8018571a1c9c6d9
+timeCreated: 1441129537
+licenseType: Store
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 45175
+  packageName: Cargo container
+  packageVersion: 1.0
+  assetPath: Assets/Container/model/cargo_container.mtl
+  uploadId: 79550

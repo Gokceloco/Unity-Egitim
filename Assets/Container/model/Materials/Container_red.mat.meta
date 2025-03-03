@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: a49fe4a202f5aa14fb46f489af05af68
+timeCreated: 1441126782
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 45175
+  packageName: Cargo container
+  packageVersion: 1.0
+  assetPath: Assets/Container/model/Materials/Container_red.mat
+  uploadId: 79550

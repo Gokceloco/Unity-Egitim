@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: cfa427844f5aced429896e4ca3779426
+timeCreated: 1441126695
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 45175
+  packageName: Cargo container
+  packageVersion: 1.0
+  assetPath: Assets/Container/model/Materials/Container_blue.mat
+  uploadId: 79550

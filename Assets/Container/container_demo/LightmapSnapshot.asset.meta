@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: f254da018534200439b79ba7c22dedd2
+timeCreated: 1441127767
+licenseType: Store
+NativeFormatImporter:
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 45175
+  packageName: Cargo container
+  packageVersion: 1.0
+  assetPath: Assets/Container/container_demo/LightmapSnapshot.asset
+  uploadId: 79550

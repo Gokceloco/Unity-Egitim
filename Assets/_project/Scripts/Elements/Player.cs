@@ -106,7 +106,6 @@ public class Player : MonoBehaviour
 
             Vector3 direction = Vector3.zero;
 
-
             if (!_isCrouching)
             {
                 _tempSpeed = speed;
@@ -133,7 +132,15 @@ public class Player : MonoBehaviour
                 direction += transform.right;
             }
 
-            rb.position += direction.normalized * _tempSpeed * Time.fixedDeltaTime;
+            var yVelocity = rb.linearVelocity;
+
+            yVelocity.x = 0;
+            yVelocity.z = 0;
+
+            rb.linearVelocity = direction.normalized * _tempSpeed + yVelocity;
+
+            //rb.position += direction.normalized * _tempSpeed * Time.fixedDeltaTime;
+
             cameraHolder.position = Vector3.SmoothDamp(cameraHolder.position,
                 transform.position, ref velocity, cameraSmoothTime);
         }

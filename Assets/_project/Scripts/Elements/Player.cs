@@ -27,9 +27,12 @@ public class Player : MonoBehaviour
     float _tempSpeed;
     private bool _isCrouching;
 
+    private Animator _animator;
+
     public void RestartPlayer()
     {
         gameObject.SetActive(true);
+        _animator = GetComponentInChildren<Animator>();
         transform.position = Vector3.zero;
     }
 
@@ -143,6 +146,8 @@ public class Player : MonoBehaviour
 
             cameraHolder.position = Vector3.SmoothDamp(cameraHolder.position,
                 transform.position, ref velocity, cameraSmoothTime);
+
+            
         }
     }
     private void StartCrouch()

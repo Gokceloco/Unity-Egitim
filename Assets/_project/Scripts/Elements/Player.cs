@@ -25,9 +25,14 @@ public class Player : MonoBehaviour
     public LayerMask jumpLayerMask;
 
     float _tempSpeed;
+
+    public AnimationState _animationState;
+
     private bool _isCrouching;
 
     private Animator _animator;
+
+    private bool _hasRecentlyJumped;
 
     public void RestartPlayer()
     {
@@ -46,11 +51,30 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if (!_hasRecentlyJumped && GetIfLanded())
+        {
+            if (_animationState == AnimationState.Jump)
+            {
+                _animationState = AnimationState.Idle;
+            }
+        }
+        else
+        {
+            if (_animationState != AnimationState.Jump)
+            {
+                _animationState = AnimationState.Jump;
+                _animator.SetTrigger("JumpAir");
+            }            
+        }
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            if (Physics.Raycast(transform.position + Vector3.up * .1f, Vector3.down, 1f, jumpLayerMask))
+            if (GetIfLanded())
             {
                 rb.linearVelocity = new Vector3(rb.linearVelocity.x, jumpPower, rb.linearVelocity.z);
+                _animator.SetTrigger("Jump");
+                _animationState = AnimationState.Jump;
+                _hasRecentlyJumped = true;
+                Invoke(nameof(SetRecentlyJumpedFalse), .5f);
             }
         }
         if (Input.GetKeyDown(KeyCode.LeftControl))
@@ -64,6 +88,16 @@ public class Player : MonoBehaviour
             _isCrouching = false;
             StopCrouch();
         }
+    }
+
+    private void SetRecentlyJumpedFalse()
+    {
+        _hasRecentlyJumped = false;
+    }
+
+    private bool GetIfLanded()
+    {
+        return Physics.Raycast(transform.position + Vector3.up * .1f, Vector3.down, 1f, jumpLayerMask);
     }
 
     void FixedUpdate()
@@ -94,10 +128,9 @@ public class Player : MonoBehaviour
             {
                 direction += Vector3.right;
             }
-
             rb.position += direction.normalized * _tempSpeed * Time.fixedDeltaTime;
             cameraHolder.position = Vector3.SmoothDamp(cameraHolder.position,
-                transform.position, ref velocity, cameraSmoothTime);
+            transform.position, ref velocity, cameraSmoothTime);
         }
         else if (controlStyle == ControlStyle.ThirdPerson)
         {
@@ -121,19 +154,68 @@ public class Player : MonoBehaviour
             if (Input.GetKey(KeyCode.W))
             {
                 direction += transform.forward;
+                //_animator.SetFloat("WalkBlend", 0);
             }
             if (Input.GetKey(KeyCode.S))
             {
                 direction += -transform.forward;
+                //_animator.SetFloat("WalkBlend", .5f);
             }
             if (Input.GetKey(KeyCode.A))
             {
                 direction += -transform.right;
+                
+                /*if (Input.GetKey(KeyCode.W))
+                {
+                    _animator.SetFloat("WalkBlend", .125f);
+                }
+                else if (Input.GetKey(KeyCode.S))
+                {
+                    _animator.SetFloat("WalkBlend", .375f);
+                }
+                else
+                {
+                    _animator.SetFloat("WalkBlend", .25f);
+                }*/
             }
             if (Input.GetKey(KeyCode.D))
             {
                 direction += transform.right;
+                /*if (Input.GetKey(KeyCode.W))
+                {
+                    _animator.SetFloat("WalkBlend", .875f);
+                }
+                else if (Input.GetKey(KeyCode.S))
+                {
+                    _animator.SetFloat("WalkBlend", .675f);
+                }
+                else
+                {
+                    _animator.SetFloat("WalkBlend", .75f);
+                }*/
             }
+
+            print(Vector3.SignedAngle(transform.forward, direction, Vector3.up) / 180f);
+
+            _animator.SetFloat("WalkBlend", Vector3.SignedAngle(transform.forward, direction, Vector3.up) / 180f);
+
+            if (direction == Vector3.zero)
+            {
+                if (_animationState != AnimationState.Idle && _animationState != AnimationState.Jump)
+                {
+                    _animator.SetTrigger("Idle");
+                    _animationState = AnimationState.Idle;
+                }
+            }
+            else
+            {
+                if (_animationState != AnimationState.Walk && _animationState != AnimationState.Jump)
+                {
+                    _animator.SetTrigger("Walk");
+                    _animationState = AnimationState.Walk;
+                }
+            }
+
 
             var yVelocity = rb.linearVelocity;
 
@@ -183,4 +265,11 @@ public enum ControlStyle
     PlayerLooksToMouse,
     ThirdPerson,
     FPS,
+}
+
+public enum AnimationState
+{
+    Idle,
+    Walk,
+    Jump
 }

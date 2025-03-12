@@ -180,6 +180,7 @@ MonoBehaviour:
   jumpLayerMask:
     serializedVersion: 2
     m_Bits: 4294967295
+  _animationState: 0
 --- !u!54 &77953111
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -814,11 +815,28 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1581337525 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9188278811865288090, guid: 45ba5550a3e809a4fbcb9111cbffedf9, type: 3}
+  m_PrefabInstance: {fileID: 1658892134}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1581337526 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8415119155074357024, guid: 45ba5550a3e809a4fbcb9111cbffedf9, type: 3}
   m_PrefabInstance: {fileID: 1658892134}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1581337528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1581337525}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14c64f68c147c284b9d04520dda44827, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1658892134
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -922,7 +940,10 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9188278811865288090, guid: 45ba5550a3e809a4fbcb9111cbffedf9, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1581337528}
   m_SourcePrefab: {fileID: 100100000, guid: 45ba5550a3e809a4fbcb9111cbffedf9, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

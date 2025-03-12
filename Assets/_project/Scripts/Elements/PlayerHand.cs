@@ -41,6 +41,9 @@ public class PlayerHand : MonoBehaviour
         {
             _carryingBox = null;            
         }
-        _carryingBox.transform.position = player.transform.position + _offset;
+        if (_carryingBox)
+        {
+            _carryingBox.transform.position = player.transform.position + _offset;
+        }
     }
 }

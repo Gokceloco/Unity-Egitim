@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public GameDirector gameDirector;
     public ControlStyle controlStyle;
 
     public float speed;
@@ -154,48 +155,19 @@ public class Player : MonoBehaviour
             if (Input.GetKey(KeyCode.W))
             {
                 direction += transform.forward;
-                //_animator.SetFloat("WalkBlend", 0);
             }
             if (Input.GetKey(KeyCode.S))
             {
                 direction += -transform.forward;
-                //_animator.SetFloat("WalkBlend", .5f);
             }
             if (Input.GetKey(KeyCode.A))
             {
                 direction += -transform.right;
-                
-                /*if (Input.GetKey(KeyCode.W))
-                {
-                    _animator.SetFloat("WalkBlend", .125f);
-                }
-                else if (Input.GetKey(KeyCode.S))
-                {
-                    _animator.SetFloat("WalkBlend", .375f);
-                }
-                else
-                {
-                    _animator.SetFloat("WalkBlend", .25f);
-                }*/
             }
             if (Input.GetKey(KeyCode.D))
             {
                 direction += transform.right;
-                /*if (Input.GetKey(KeyCode.W))
-                {
-                    _animator.SetFloat("WalkBlend", .875f);
-                }
-                else if (Input.GetKey(KeyCode.S))
-                {
-                    _animator.SetFloat("WalkBlend", .675f);
-                }
-                else
-                {
-                    _animator.SetFloat("WalkBlend", .75f);
-                }*/
             }
-
-            print(Vector3.SignedAngle(transform.forward, direction, Vector3.up) / 180f);
 
             _animator.SetFloat("WalkBlend", Vector3.SignedAngle(transform.forward, direction, Vector3.up) / 180f);
 
@@ -223,8 +195,6 @@ public class Player : MonoBehaviour
             yVelocity.z = 0;
 
             rb.linearVelocity = direction.normalized * _tempSpeed + yVelocity;
-
-            //rb.position += direction.normalized * _tempSpeed * Time.fixedDeltaTime;
 
             cameraHolder.position = Vector3.SmoothDamp(cameraHolder.position,
                 transform.position, ref velocity, cameraSmoothTime);

@@ -3,11 +3,12 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    public Level level1;
+    public Level level1Prefab;
+
     private Level _currentLevel;
     public void CreateLevel()
     {
-        _currentLevel = Instantiate(level1);
+        _currentLevel = Instantiate(level1Prefab);
         _currentLevel.transform.position = Vector3.zero;
         _currentLevel.StartLevel();
     }
@@ -18,5 +19,10 @@ public class LevelManager : MonoBehaviour
         {
             Destroy(_currentLevel.gameObject);
         }
+    }
+
+    public void SetParentToMap(Transform obj)
+    {
+        obj.SetParent(_currentLevel.transform);
     }
 }

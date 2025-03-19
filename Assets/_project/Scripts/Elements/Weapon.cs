@@ -1,3 +1,5 @@
+using DG.Tweening;
+using System.Collections;
 using UnityEngine;
 
 public class Weapon : MonoBehaviour
@@ -22,6 +24,9 @@ public class Weapon : MonoBehaviour
 
     private float _lastShootTime;
 
+    public GameObject machinegunMesh;
+    public GameObject shotgunMesh;    
+
     private void Awake()
     {
         _player = GetComponentInParent<Player>();
@@ -29,8 +34,20 @@ public class Weapon : MonoBehaviour
 
     private void Update()
     {
-        if (weaponType == WeaponType.Machinegun 
-            && Input.GetMouseButton(0) 
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            weaponType = WeaponType.Machinegun;
+            machinegunMesh.SetActive(true);
+            shotgunMesh.SetActive(false);
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            weaponType = WeaponType.Shotgun;
+            machinegunMesh.SetActive(false);
+            shotgunMesh.SetActive(true);
+        }
+        if (weaponType == WeaponType.Machinegun
+            && Input.GetMouseButton(0)
             && Time.time - _lastShootTime > machinegunAttackRate)
         {
             Shoot(machinegunSpread, machinegunMaxDistance);
@@ -39,12 +56,14 @@ public class Weapon : MonoBehaviour
             && Input.GetMouseButtonUp(0)
             && Time.time - _lastShootTime > shotgunAttackRate)
         {
+            _player.transform.DOMove(_player.transform.position - _player.transform.forward*2, .05f);
             for (int i = 0; i < shotgunBulletCount; i++)
             {
                 Shoot(shotgunSpread, shotgunMaxDistance);
             }
         }
     }
+
 
     public void Shoot(float spread, float maxDistance)
     {
@@ -59,7 +78,7 @@ public class Weapon : MonoBehaviour
 
         newBullet.transform.LookAt(transform.position + bulletDirection);
 
-        newBullet.StartBullet(bulletDirection, maxDistance);
+        newBullet.StartBullet(_player, bulletDirection, maxDistance);
         _lastShootTime = Time.time;
     }
 }

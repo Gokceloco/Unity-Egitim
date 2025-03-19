@@ -3,6 +3,7 @@ using UnityEngine;
 public class GameDirector : MonoBehaviour
 {
     public LevelManager levelManager;
+    public FXManager fXManager;
     public Player player;
 
     private void Start()

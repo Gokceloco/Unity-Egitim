@@ -175,6 +175,7 @@ public class Player : MonoBehaviour
             {
                 if (_animationState != AnimationState.Idle && _animationState != AnimationState.Jump)
                 {
+                    _animator.ResetTrigger("Walk");
                     _animator.SetTrigger("Idle");
                     _animationState = AnimationState.Idle;
                 }
@@ -183,6 +184,7 @@ public class Player : MonoBehaviour
             {
                 if (_animationState != AnimationState.Walk && _animationState != AnimationState.Jump)
                 {
+                    _animator.ResetTrigger("Idle");
                     _animator.SetTrigger("Walk");
                     _animationState = AnimationState.Walk;
                 }
@@ -225,6 +227,7 @@ public class Player : MonoBehaviour
     {
         if (other.CompareTag("Collectable"))
         {
+            gameDirector.fXManager.PlayCoinCollectedFX(other.transform.position);
             other.gameObject.SetActive(false);
         }
     }

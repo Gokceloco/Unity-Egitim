@@ -72,9 +72,21 @@ public class Weapon : MonoBehaviour
         newBullet.transform.rotation = shootPos.rotation;
         _player.gameDirector.levelManager.SetParentToMap(newBullet.transform);
 
-        var bulletDirection = _player.transform.forward
-            + _player.transform.right * Random.Range(-spread, spread)
+        Vector3 s = Vector3.zero;
+
+        if (weaponType == WeaponType.Machinegun)
+        {
+            s = _player.transform.right * Random.Range(-spread, spread)
             + Vector3.up * Random.Range(-spread, spread);
+        }
+        else if(weaponType == WeaponType.Shotgun)
+        {
+            s = _player.transform.right * Random.Range(-spread, spread)
+            + Vector3.up * Random.Range(-spread/2f, spread);
+        }
+
+
+            var bulletDirection = _player.transform.forward + s;
 
         newBullet.transform.LookAt(transform.position + bulletDirection);
 

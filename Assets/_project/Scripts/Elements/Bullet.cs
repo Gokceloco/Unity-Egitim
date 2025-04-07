@@ -5,6 +5,7 @@ public class Bullet : MonoBehaviour
 {
     private Player _player;
     public float speed;
+    public int damage;
     private bool _isBulletStarted;
     private Vector3 _direction;
     private Vector3 _startPos;
@@ -36,6 +37,13 @@ public class Bullet : MonoBehaviour
         if (other.CompareTag("Ground"))
         {
             _player.gameDirector.fXManager.PlayBuleltHitFX(transform.position);
+            Destroy(gameObject);
+        }
+        if (other.CompareTag("Enemy"))
+        {
+            var enemy = other.GetComponent<Enemy>();
+            enemy.GetHit(damage);
+            _player.gameDirector.fXManager.PlayZombieHitFX(transform.position, _direction);
             Destroy(gameObject);
         }
     }

@@ -8,14 +8,15 @@ TagManager:
   - Enemy
   - InteractableBox
   - Ground
+  - Head
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Player
   - Water
   - UI
-  - 
+  - Ground
   - 
   - 
   - 

@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
+    public GameDirector gameDirector;
     public Level level1Prefab;
 
     private Level _currentLevel;
@@ -10,7 +11,7 @@ public class LevelManager : MonoBehaviour
     {
         _currentLevel = Instantiate(level1Prefab);
         _currentLevel.transform.position = Vector3.zero;
-        _currentLevel.StartLevel();
+        _currentLevel.StartLevel(gameDirector.player);
     }
 
     public void DeleteCurrentLevel()

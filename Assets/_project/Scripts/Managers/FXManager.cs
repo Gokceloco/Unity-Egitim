@@ -4,6 +4,7 @@ public class FXManager : MonoBehaviour
 {
     public ParticleSystem coinCollectedPS;
     public ParticleSystem bulletHitPS;
+    public ParticleSystem zombieHitPS;
     public void PlayCoinCollectedFX(Vector3 pos)
     {
         var newPS = Instantiate(coinCollectedPS);
@@ -14,6 +15,13 @@ public class FXManager : MonoBehaviour
     {
         var newPS = Instantiate(bulletHitPS);
         newPS.transform.position = pos;
+        newPS.Play();
+    }
+    public void PlayZombieHitFX(Vector3 pos, Vector3 direction)
+    {
+        var newPS = Instantiate(zombieHitPS);
+        newPS.transform.position = pos;
+        newPS.transform.LookAt(pos + direction);
         newPS.Play();
     }
 }

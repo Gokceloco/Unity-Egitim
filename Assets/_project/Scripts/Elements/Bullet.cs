@@ -41,10 +41,15 @@ public class Bullet : MonoBehaviour
         }
         if (other.CompareTag("Enemy"))
         {
-            var enemy = other.GetComponent<Enemy>();
-            enemy.GetHit(damage);
-            _player.gameDirector.fXManager.PlayZombieHitFX(transform.position, _direction);
-            Destroy(gameObject);
+            var enemy = other.GetComponentInParent<Enemy>();
+            if (enemy.enemyState != EnemyState.Dead)
+            {
+                enemy.GetHit(damage);
+                var dir = transform.position - enemy.transform.position;
+                dir.y = 0;
+                _player.gameDirector.fXManager.PlayZombieHitFX(transform.position, dir);
+                Destroy(gameObject);
+            }           
         }
     }
 }

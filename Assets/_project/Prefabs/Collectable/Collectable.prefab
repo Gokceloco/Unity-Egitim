@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9184134313404930774}
   - component: {fileID: 6384264236470782282}
   - component: {fileID: 3816407842657475156}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Collectable
   m_TagString: Collectable
   m_Icon: {fileID: 0}
@@ -80,7 +80,7 @@ GameObject:
   - component: {fileID: 2099495106640216551}
   - component: {fileID: 4868852922570421241}
   - component: {fileID: 6627955009318613591}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Cylinder
   m_TagString: Untagged
   m_Icon: {fileID: 0}

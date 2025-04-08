@@ -88,7 +88,7 @@ public class Weapon : MonoBehaviour
 
             var bulletDirection = _player.transform.forward + s;
 
-        newBullet.transform.LookAt(transform.position + bulletDirection);
+        newBullet.transform.LookAt(newBullet.transform.position + bulletDirection);
 
         newBullet.StartBullet(_player, bulletDirection, maxDistance);
         _lastShootTime = Time.time;

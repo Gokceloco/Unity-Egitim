@@ -51,6 +51,7 @@ public class Weapon : MonoBehaviour
             && Time.time - _lastShootTime > machinegunAttackRate)
         {
             Shoot(machinegunSpread, machinegunMaxDistance);
+            _player.gameDirector.audioManager.PlayShootAS();
         }
         else if (weaponType == WeaponType.Shotgun
             && Input.GetMouseButtonUp(0)
@@ -61,6 +62,7 @@ public class Weapon : MonoBehaviour
             {
                 Shoot(shotgunSpread, shotgunMaxDistance);
             }
+            _player.gameDirector.audioManager.PlayShotgunShootAS();
         }
     }
 
@@ -85,13 +87,12 @@ public class Weapon : MonoBehaviour
             + Vector3.up * Random.Range(-spread/2f, spread);
         }
 
-
-            var bulletDirection = _player.transform.forward + s;
+        var bulletDirection = _player.transform.forward + s;
 
         newBullet.transform.LookAt(newBullet.transform.position + bulletDirection);
 
         newBullet.StartBullet(_player, bulletDirection, maxDistance);
-        _lastShootTime = Time.time;
+        _lastShootTime = Time.time;       
     }
 }
 

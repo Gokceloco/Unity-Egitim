@@ -53,6 +53,12 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if (_animationState != AnimationState.Jump && rb.linearVelocity.y > 0) 
+        {
+            var vel = rb.linearVelocity;
+            vel.y = 0;
+            rb.linearVelocity = vel;
+        }
         if (!_hasRecentlyJumped && GetIfLanded())
         {
             if (_animationState == AnimationState.Jump)

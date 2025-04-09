@@ -48,6 +48,7 @@ public class Bullet : MonoBehaviour
                 var dir = transform.position - enemy.transform.position;
                 dir.y = 0;
                 _player.gameDirector.fXManager.PlayZombieHitFX(transform.position, dir);
+                gameObject.SetActive(false);
                 Destroy(gameObject);
             }           
         }

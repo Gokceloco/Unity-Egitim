@@ -1,5 +1,6 @@
 using DG.Tweening;
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -18,12 +19,15 @@ public class Enemy : MonoBehaviour
 
     public EnemyState enemyState;
 
+    public HealthBar healthBar;
+
     public void StartEnemy(Player player)
     {
         _currentHealth = startHealth;
         _player = player;
         _animator = GetComponentInChildren<Animator>();
         enemyState = EnemyState.Idle;
+        healthBar.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -37,6 +41,7 @@ public class Enemy : MonoBehaviour
         {
             _didSeePlayer = true;
             _animator.SetTrigger("Walk");
+            StartCoroutine(ZombieSoundCoroutine());
         }
 
         if (_didSeePlayer)
@@ -46,9 +51,19 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    IEnumerator ZombieSoundCoroutine()
+    {
+        while (enemyState != EnemyState.Dead)
+        {
+            _player.gameDirector.audioManager.PlayZombieAlertAS();
+            yield return new WaitForSeconds(4);
+        }
+    }
+
     private void MoveToPlayer()
     {
         var dir = (_player.transform.position - transform.position).normalized;
+        dir.y = 0;
         transform.position += dir * Time.deltaTime * speed;
         transform.LookAt(transform.position + dir);
     }
@@ -56,9 +71,12 @@ public class Enemy : MonoBehaviour
     public void GetHit(int damage)
     {
         _currentHealth -= damage;
+        healthBar.gameObject.SetActive(true);
+        healthBar.UpdateHealthBar((float)_currentHealth / startHealth);
         if (_currentHealth <= 0)
         {
             Die();
+            healthBar.gameObject.SetActive(false);
         }
     }
 

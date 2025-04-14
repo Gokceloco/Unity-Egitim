@@ -34,6 +34,10 @@ public class Weapon : MonoBehaviour
 
     private void Update()
     {
+        if (_player.gameDirector.gameState != GameState.GamePlay)
+        {
+            return;
+        }
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             weaponType = WeaponType.Machinegun;

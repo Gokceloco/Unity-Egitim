@@ -36,23 +36,23 @@ public class Player : MonoBehaviour
 
     private bool _hasRecentlyJumped;
 
+    public float maxXRotation;
+    public float minXRotation;
+
     public void RestartPlayer()
     {
         gameObject.SetActive(true);
         _animator = GetComponentInChildren<Animator>();
         transform.position = Vector3.zero;
-    }
-
-    private void Start()
-    {
-        if (controlStyle == ControlStyle.ThirdPerson)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-        }
+        rb.constraints = RigidbodyConstraints.FreezeRotation;
     }
 
     private void Update()
     {
+        if (gameDirector.gameState != GameState.GamePlay)
+        {
+            return;
+        }
         if (_animationState != AnimationState.Jump && rb.linearVelocity.y > 0) 
         {
             var vel = rb.linearVelocity;
@@ -110,11 +110,26 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (gameDirector.gameState != GameState.GamePlay)
+        {
+            return;
+        }
         turn.x += Input.GetAxis("Mouse X"); 
         turn.y += Input.GetAxis("Mouse Y");
 
         transform.rotation = Quaternion.Euler(0, turn.x * sensitivity, 0);
-        cameraHolder.rotation = Quaternion.Euler(-turn.y * sensitivity, turn.x * sensitivity, 0);
+        //var xRot = Mathf.Clamp(-turn.y * sensitivity, minXRotation, maxXRotation);
+
+        if (-turn.y * sensitivity < minXRotation)
+        {
+            turn.y = -minXRotation / sensitivity;
+        }
+        else if (-turn.y * sensitivity > maxXRotation)
+        {
+            turn.y = -maxXRotation / sensitivity;
+        }
+
+       cameraHolder.rotation = Quaternion.Euler(-turn.y * sensitivity, turn.x * sensitivity, 0);
 
         Vector3 direction = Vector3.zero;
 

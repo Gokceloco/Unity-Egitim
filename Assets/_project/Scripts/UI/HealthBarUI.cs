@@ -1,9 +1,12 @@
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HealthBarUI : MonoBehaviour
 {
     private CanvasGroup _canvasGroup;
+
+    public Image healthBar;
 
     private void Awake()
     {
@@ -19,5 +22,14 @@ public class HealthBarUI : MonoBehaviour
     {
         _canvasGroup.DOKill();
         _canvasGroup.DOFade(0, .2f).OnComplete(() => gameObject.SetActive(false));
+    }
+
+    public void SetHealthBar(float ratio)
+    {
+        healthBar.fillAmount = ratio;
+        if(healthBar.fillAmount < .01f)
+        {
+            Hide();
+        }
     }
 }

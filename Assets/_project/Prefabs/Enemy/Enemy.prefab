@@ -50,6 +50,7 @@ MonoBehaviour:
   startHealth: 10
   damage: 1
   playerDetectDistance: 20
+  attackDistance: 3
   speed: 4
   enemyState: 0
   healthBar: {fileID: 5354986398655472404}

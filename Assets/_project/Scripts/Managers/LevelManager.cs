@@ -26,4 +26,9 @@ public class LevelManager : MonoBehaviour
     {
         obj.SetParent(_currentLevel.transform);
     }
+
+    public void StopEnemies()
+    {
+        _currentLevel.StopEnemies();
+    }
 }

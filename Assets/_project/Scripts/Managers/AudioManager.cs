@@ -8,6 +8,8 @@ public class AudioManager : MonoBehaviour
     public AudioSource zombieAlertAS;
     public AudioSource zombieAlertAS2;
     public AudioSource zombieHitAS;
+    public AudioSource playerHitAS;
+    public AudioSource footStepAS;
 
     public AudioSource ambianceAS;
 
@@ -26,6 +28,10 @@ public class AudioManager : MonoBehaviour
     public void PlayZombieHitAS()
     {
         zombieHitAS.Play();
+    }
+    public void PlayPlayerHitAS()
+    {
+        playerHitAS.Play();
     }
     public void PlayZombieAlertAS()
     {
@@ -46,5 +52,10 @@ public class AudioManager : MonoBehaviour
     public void StopAmbianceSound1()
     {
         ambianceAS.Stop();
+    }
+
+    public void PlayFootStepSound()
+    {
+        footStepAS.Play();
     }
 }

@@ -11,15 +11,19 @@ public class Enemy : MonoBehaviour
     public int damage;
 
     public float playerDetectDistance;
+    public float attackDistance;
     public float speed;
 
     private Player _player;
     private bool _didSeePlayer;
+    private bool _isAttacking;
     private Animator _animator;
 
     public EnemyState enemyState;
 
     public HealthBar healthBar;
+
+    private Coroutine _attackCoroutine;
 
     public void StartEnemy(Player player)
     {
@@ -32,23 +36,57 @@ public class Enemy : MonoBehaviour
 
     private void Update()
     {
-        if (enemyState == EnemyState.Dead)
+        if (enemyState == EnemyState.Dead || _player.isDead)
         {
             return;
         }
 
-        if (!_didSeePlayer && (_player.transform.position - transform.position).magnitude < playerDetectDistance)
+        if (!_isAttacking && (_player.transform.position - transform.position).magnitude < attackDistance)
         {
-            _didSeePlayer = true;
-            _animator.SetTrigger("Walk");
-            StartCoroutine(ZombieSoundCoroutine());
+            _isAttacking = true;
+            _animator.SetTrigger("Attack");
+            enemyState = EnemyState.Attacking;
+            _attackCoroutine = StartCoroutine(AttackCoroutine());
         }
+        else if (!_isAttacking)
+        {
+            if (!_didSeePlayer && (_player.transform.position - transform.position).magnitude < playerDetectDistance)
+            {
+                _didSeePlayer = true;
+                _animator.SetTrigger("Walk");
+                StartCoroutine(ZombieSoundCoroutine());
+            }
 
-        if (_didSeePlayer)
-        {
-            enemyState = EnemyState.Walking;            
-            MoveToPlayer();
+            if (_didSeePlayer)
+            {
+                enemyState = EnemyState.Walking;
+                MoveToPlayer();
+            }
         }
+        
+    }
+
+    IEnumerator AttackCoroutine()
+    {
+        yield return new WaitForSeconds(1.3f);
+        if ((_player.transform.position - transform.position).magnitude < attackDistance)
+        {
+            _player.GetHit(1);
+            _player.gameDirector.audioManager.PlayPlayerHitAS();
+        }
+        yield return new WaitForSeconds(.8f);
+        if (!_player.isDead)
+        {
+            enemyState = EnemyState.Walking;
+            _animator.SetTrigger("Walk");
+        }
+        else
+        {
+            enemyState = EnemyState.Idle;
+            _animator.SetTrigger("Idle");
+        }
+        _didSeePlayer = false;
+        _isAttacking = false;
     }
 
     IEnumerator ZombieSoundCoroutine()
@@ -56,7 +94,7 @@ public class Enemy : MonoBehaviour
         while (enemyState != EnemyState.Dead)
         {
             _player.gameDirector.audioManager.PlayZombieAlertAS();
-            yield return new WaitForSeconds(4);
+            yield return new WaitForSeconds(8);
         }
     }
 
@@ -82,6 +120,10 @@ public class Enemy : MonoBehaviour
 
     private void Die()
     {
+        if (_attackCoroutine != null)
+        {
+            StopCoroutine(_attackCoroutine);
+        }
         enemyState = EnemyState.Dead;
         if (UnityEngine.Random.value < .5f)
         {
@@ -93,7 +135,6 @@ public class Enemy : MonoBehaviour
         }
         Invoke(nameof(DisableColldiers), 2f);
         Destroy(gameObject, 4f);
-        //gameObject.SetActive(false);
     }
     private void DisableColldiers()
     {
@@ -102,6 +143,13 @@ public class Enemy : MonoBehaviour
         {
             c.enabled = false;
         }
+    }
+
+    public void StopEnemy()
+    {
+        enemyState = EnemyState.Idle;
+        _animator.SetTrigger("Idle");
+        speed = 0;
     }
 }
 

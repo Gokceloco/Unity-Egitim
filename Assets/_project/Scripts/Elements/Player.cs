@@ -1,5 +1,4 @@
 using DG.Tweening;
-using System;
 using Unity.Cinemachine;
 using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
@@ -39,17 +38,34 @@ public class Player : MonoBehaviour
     public float maxXRotation;
     public float minXRotation;
 
+    public int startHealth;
+    private int _currentHealth;
+    public bool isDead;
+
+    public Transform weaponHand;
+    public Transform weaponContainer;
+
     public void RestartPlayer()
     {
         gameObject.SetActive(true);
         _animator = GetComponentInChildren<Animator>();
         transform.position = Vector3.zero;
         rb.constraints = RigidbodyConstraints.FreezeRotation;
+        _currentHealth = startHealth;
+        isDead = false;
+        gameDirector.healthBarUI.SetHealthBar(1);
+        Camera.main.GetComponent<CameraCollision>().maxDistance = 3;
+
+        weaponContainer.SetParent(weaponHand);
+        weaponContainer.transform.localPosition = Vector3.zero;
+        weaponContainer.transform.localRotation = Quaternion.identity;
+        weaponContainer.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        weaponContainer.GetComponentInChildren<BoxCollider>().enabled = false;
     }
 
     private void Update()
     {
-        if (gameDirector.gameState != GameState.GamePlay)
+        if (gameDirector.gameState != GameState.GamePlay || isDead)
         {
             return;
         }
@@ -110,7 +126,7 @@ public class Player : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (gameDirector.gameState != GameState.GamePlay)
+        if (gameDirector.gameState != GameState.GamePlay || isDead)
         {
             return;
         }
@@ -198,19 +214,7 @@ public class Player : MonoBehaviour
     private void StopCrouch()
     {
         transform.DOKill();
-        transform.DOScaleY(1, .3f);
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.CompareTag("Enemy"))
-        {
-            var enemy = collision.gameObject.GetComponentInParent<Enemy>();
-            if (enemy.enemyState != EnemyState.Dead)
-            {
-                gameObject.SetActive(false);
-            }
-        }
+        transform.DOScaleY(1,.3f);
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -219,6 +223,41 @@ public class Player : MonoBehaviour
             gameDirector.fXManager.PlayCoinCollectedFX(other.transform.position);
             other.gameObject.SetActive(false);
         }
+    }
+    public void GetHit(int damage)
+    {
+        _currentHealth -= damage;
+        gameDirector.healthBarUI.SetHealthBar((float)_currentHealth / startHealth);
+        if (_currentHealth <= 0 && !isDead)
+        {
+            Die();
+        }
+    }
+
+    private void Die()
+    {
+        isDead = true;
+        //gameObject.SetActive(false);
+        _animator.SetTrigger("FallBack");
+        _animationState = AnimationState.Dead;
+        gameDirector.levelManager.StopEnemies();
+        Camera.main.GetComponent<CameraCollision>().maxDistance = 10;
+        rb.constraints = RigidbodyConstraints.FreezeAll;
+
+        Invoke(nameof(ReleaseWeapon), 1);
+        
+    }
+
+    void ReleaseWeapon()
+    {
+        weaponContainer.SetParent(null);
+        weaponContainer.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+        weaponContainer.GetComponent<Rigidbody>().linearVelocity = transform.forward * -5 + Vector3.up * 3;
+        weaponContainer.GetComponent<Rigidbody>().angularVelocity
+            = new Vector3(Random.Range(-10f, 10f),
+            Random.Range(-10f, 10f),
+            Random.Range(-10f, 10f));
+        weaponContainer.GetComponentInChildren<BoxCollider>().enabled = true;
     }
 }
 
@@ -233,5 +272,6 @@ public enum AnimationState
 {
     Idle,
     Walk,
-    Jump
+    Jump,
+    Dead,
 }

@@ -34,10 +34,10 @@ public class InventoryUI : MonoBehaviour
     public void Hide()
     {
         canvasGroup.DOKill();
+        gameDirector.gameState = GameState.GamePlay;
         canvasGroup.DOFade(0, .2f).SetUpdate(true).OnComplete(() =>
         {
-            gameObject.SetActive(false);
-            gameDirector.gameState = GameState.GamePlay;
+            gameObject.SetActive(false);            
             });
         Cursor.lockState = CursorLockMode.Locked;
     }

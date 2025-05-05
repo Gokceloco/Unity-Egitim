@@ -28,6 +28,14 @@ public class GameDirector : MonoBehaviour
         mainMenuUI.Show();
         failUI.Hide();
         victoryUI.Hide();
+
+        levelManager.levelNo = PlayerPrefs.GetInt("LastLevelNo");
+        if (levelManager.levelNo < 1)
+        {
+            levelManager.levelNo = 1;
+        }
+        /*var data = SaveSystem.LoadData("start");
+        levelManager.levelNo = data.lastLevelNo;*/
     }
 
 
@@ -109,10 +117,12 @@ public class GameDirector : MonoBehaviour
 
     public void LevelCompleted()
     {
+        inventoryUI.Hide();
         victoryUI.Show();
         gameState = GameState.VictoryUI;
         levelUI.Hide();
-        inventoryUI.Hide();
+        //SaveSystem.SaveData("start", levelManager.levelNo+1, 1, Vector3.zero);
+        PlayerPrefs.SetInt("LastLevel", levelManager.levelNo);
     }
 }
 public enum GameState

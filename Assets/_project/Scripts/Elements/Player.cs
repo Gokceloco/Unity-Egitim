@@ -291,6 +291,11 @@ public class Player : MonoBehaviour
             Random.Range(-10f, 10f));
         weaponContainer.GetComponentInChildren<BoxCollider>().enabled = true;
     }
+
+    internal float GetHealthRatio()
+    {
+        return (float)_currentHealth / startHealth;
+    }
 }
 
 public enum ControlStyle

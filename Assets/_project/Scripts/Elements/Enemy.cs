@@ -25,6 +25,8 @@ public class Enemy : MonoBehaviour
 
     private Coroutine _attackCoroutine;
 
+    private Rigidbody _rb;
+
     public void StartEnemy(Player player)
     {
         _currentHealth = startHealth;
@@ -68,7 +70,7 @@ public class Enemy : MonoBehaviour
 
     IEnumerator AttackCoroutine()
     {
-        yield return new WaitForSeconds(1.3f);
+        yield return new WaitForSeconds(1.1f);
         if ((_player.transform.position - transform.position).magnitude < attackDistance)
         {
             _player.GetHit(1);

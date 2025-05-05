@@ -9,6 +9,8 @@ public class CameraCollision : MonoBehaviour
     private float _distance;
     public LayerMask layerMask;
 
+    public bool isActive;
+
     private void Awake()
     {
         _dollyDir = transform.localPosition.normalized;
@@ -17,6 +19,10 @@ public class CameraCollision : MonoBehaviour
 
     private void Update()
     {
+        if (!isActive)
+        {
+            return;
+        }
         RaycastHit hit;
 
         if (Physics.Raycast(transform.parent.position, (transform.position - transform.parent.position), out hit, 3f, layerMask))

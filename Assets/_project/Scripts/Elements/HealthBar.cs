@@ -21,5 +21,10 @@ public class HealthBar : MonoBehaviour
         fillBar.DOKill();
         fillBar.color = healthBarColor;
         fillBar.DOColor(flashColor, .05f).SetLoops(2, LoopType.Yoyo);
+
+        if (ratio <= 0)
+        {
+            gameObject.SetActive(false);
+        }
     }
 }

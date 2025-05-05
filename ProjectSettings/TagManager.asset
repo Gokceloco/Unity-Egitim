@@ -9,6 +9,10 @@ TagManager:
   - InteractableBox
   - Ground
   - Head
+  - Door
+  - Key
+  - Serum
+  - ShotgunCollectable
   layers:
   - Default
   - TransparentFX

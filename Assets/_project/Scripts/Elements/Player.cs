@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     public float speed;
 
     public Rigidbody rb;
-    public Transform cameraHolder;
+    public CameraHolder cameraHolder;
     public Transform cameraTransform;
 
     public float cameraSmoothTime;
@@ -44,6 +44,10 @@ public class Player : MonoBehaviour
 
     public Transform weaponHand;
     public Transform weaponContainer;
+
+    public bool haveKey;
+
+    public Weapon weapon;
 
     public void RestartPlayer()
     {
@@ -145,7 +149,7 @@ public class Player : MonoBehaviour
             turn.y = -maxXRotation / sensitivity;
         }
 
-       cameraHolder.rotation = Quaternion.Euler(-turn.y * sensitivity, turn.x * sensitivity, 0);
+       cameraHolder.transform.rotation = Quaternion.Euler(-turn.y * sensitivity, turn.x * sensitivity, 0);
 
         Vector3 direction = Vector3.zero;
 
@@ -202,7 +206,7 @@ public class Player : MonoBehaviour
 
         rb.linearVelocity = direction.normalized * _tempSpeed + yVelocity;
 
-        cameraHolder.position = Vector3.SmoothDamp(cameraHolder.position,
+        cameraHolder.transform.position = Vector3.SmoothDamp(cameraHolder.transform.position,
             transform.position + Vector3.up * 2, ref velocity, cameraSmoothTime);
     }
     private void StartCrouch()
@@ -223,11 +227,33 @@ public class Player : MonoBehaviour
             gameDirector.fXManager.PlayCoinCollectedFX(other.transform.position);
             other.gameObject.SetActive(false);
         }
+        if (other.CompareTag("Key"))
+        {
+            other.gameObject.SetActive(false);
+            haveKey = true;
+        }
+        if (other.CompareTag("Serum"))
+        {
+            gameDirector.LevelCompleted();
+            other.gameObject.SetActive(false);
+
+            _animator.ResetTrigger("Walk");
+            _animator.SetTrigger("Idle");
+            _animationState = AnimationState.Idle;
+            rb.linearVelocity = Vector3.zero;
+        }
+        if (other.CompareTag("ShotgunCollectable"))
+        {
+            other.gameObject.SetActive(false);
+            gameDirector.inventoryUI.isShotgunAvailable = true;
+            gameDirector.messageUI.ShowMessage("SHOTGUN COLLECTED!");
+        }
     }
     public void GetHit(int damage)
     {
         _currentHealth -= damage;
         gameDirector.healthBarUI.SetHealthBar((float)_currentHealth / startHealth);
+        gameDirector.getHitUI.Show();
         if (_currentHealth <= 0 && !isDead)
         {
             Die();
@@ -237,7 +263,6 @@ public class Player : MonoBehaviour
     private void Die()
     {
         isDead = true;
-        //gameObject.SetActive(false);
         _animator.SetTrigger("FallBack");
         _animationState = AnimationState.Dead;
         gameDirector.levelManager.StopEnemies();
@@ -245,7 +270,14 @@ public class Player : MonoBehaviour
         rb.constraints = RigidbodyConstraints.FreezeAll;
 
         Invoke(nameof(ReleaseWeapon), 1);
-        
+        Invoke(nameof(ShowFailUI), 2);
+    }
+
+    void ShowFailUI()
+    {
+        gameDirector.failUI.Show();
+        gameDirector.levelUI.Hide();
+        gameDirector.inventoryUI.Hide();
     }
 
     void ReleaseWeapon()

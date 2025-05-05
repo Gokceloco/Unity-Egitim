@@ -25,7 +25,11 @@ public class Weapon : MonoBehaviour
     private float _lastShootTime;
 
     public GameObject machinegunMesh;
-    public GameObject shotgunMesh;    
+    public GameObject shotgunMesh;
+
+    public ParticleSystem muzzlePS;
+
+    public Light muzzleLight;
 
     private void Awake()
     {
@@ -40,15 +44,11 @@ public class Weapon : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            weaponType = WeaponType.Machinegun;
-            machinegunMesh.SetActive(true);
-            shotgunMesh.SetActive(false);
+            ActivateMachineGun();
         }
         if (Input.GetKeyDown(KeyCode.Alpha2))
         {
-            weaponType = WeaponType.Shotgun;
-            machinegunMesh.SetActive(false);
-            shotgunMesh.SetActive(true);
+            ActivateShotgun();
         }
         if (weaponType == WeaponType.Machinegun
             && Input.GetMouseButton(0)
@@ -56,20 +56,35 @@ public class Weapon : MonoBehaviour
         {
             Shoot(machinegunSpread, machinegunMaxDistance);
             _player.gameDirector.audioManager.PlayShootAS();
+            _player.cameraHolder.ShakeCamera(.15f, .05f);
         }
         else if (weaponType == WeaponType.Shotgun
             && Input.GetMouseButtonUp(0)
             && Time.time - _lastShootTime > shotgunAttackRate)
         {
-            _player.transform.DOMove(_player.transform.position - _player.transform.forward*2, .05f);
+            _player.transform.DOMove(_player.transform.position - _player.transform.forward*1, .05f);
             for (int i = 0; i < shotgunBulletCount; i++)
             {
                 Shoot(shotgunSpread, shotgunMaxDistance);
             }
             _player.gameDirector.audioManager.PlayShotgunShootAS();
+            _player.cameraHolder.ShakeCamera(.25f, .15f);
         }
     }
 
+    public void ActivateShotgun()
+    {
+        weaponType = WeaponType.Shotgun;
+        machinegunMesh.SetActive(false);
+        shotgunMesh.SetActive(true);
+    }
+
+    public void ActivateMachineGun()
+    {
+        weaponType = WeaponType.Machinegun;
+        machinegunMesh.SetActive(true);
+        shotgunMesh.SetActive(false);
+    }
 
     public void Shoot(float spread, float maxDistance)
     {
@@ -84,6 +99,7 @@ public class Weapon : MonoBehaviour
         {
             s = _player.transform.right * Random.Range(-spread, spread)
             + Vector3.up * Random.Range(-spread, spread);
+            
         }
         else if(weaponType == WeaponType.Shotgun)
         {
@@ -96,7 +112,13 @@ public class Weapon : MonoBehaviour
         newBullet.transform.LookAt(newBullet.transform.position + bulletDirection);
 
         newBullet.StartBullet(_player, bulletDirection, maxDistance);
-        _lastShootTime = Time.time;       
+        _lastShootTime = Time.time;
+        muzzlePS.Play();
+
+
+        muzzleLight.DOKill();
+        muzzleLight.intensity = 0;
+        muzzleLight.DOIntensity(100, .05f).SetLoops(2, LoopType.Yoyo);
     }
 }
 

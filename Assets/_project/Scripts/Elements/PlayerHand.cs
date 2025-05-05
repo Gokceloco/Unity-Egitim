@@ -11,11 +11,17 @@ public class PlayerHand : MonoBehaviour
 
     private Vector3 _offset;
 
+    public Door _doorInRange;
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("InteractableBox"))
         {
             _interactableBoxInRange = other.GetComponent<InteractableBox>();
+        }
+        if (other.CompareTag("Door"))
+        {
+            _doorInRange = other.GetComponentInParent<Door>();
         }
     }
 
@@ -24,6 +30,10 @@ public class PlayerHand : MonoBehaviour
         if (other.CompareTag("InteractableBox"))
         {
             _interactableBoxInRange = null;
+        }
+        if (other.CompareTag("Door"))
+        {
+            _doorInRange = null;
         }
     }
 
@@ -44,6 +54,10 @@ public class PlayerHand : MonoBehaviour
         if (_carryingBox)
         {
             _carryingBox.transform.position = player.transform.position + _offset;
+        }
+        if (Input.GetKeyUp(KeyCode.E) && _doorInRange != null)
+        {
+            _doorInRange.DoorIntereacted(player);
         }
     }
 }

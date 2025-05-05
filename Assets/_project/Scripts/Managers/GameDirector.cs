@@ -28,42 +28,47 @@ public class GameDirector : MonoBehaviour
         mainMenuUI.Show();
         failUI.Hide();
         victoryUI.Hide();
-
-        levelManager.levelNo = PlayerPrefs.GetInt("LastLevelNo");
+        
+        var data = SaveSystem.LoadData("start");
+        levelManager.levelNo = data.lastLevelNo;
         if (levelManager.levelNo < 1)
         {
             levelManager.levelNo = 1;
         }
-        /*var data = SaveSystem.LoadData("start");
-        levelManager.levelNo = data.lastLevelNo;*/
     }
 
 
     private void Update()
     {
-        if (gameState == GameState.GamePlay && Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            inventoryUI.Hide();
-            inventoryUIVisible = false;
-            Cursor.lockState = CursorLockMode.None;
-            gameState = GameState.MainMenu;
-            mainMenuUI.Show();
-            healthBarUI.Hide();
-            Time.timeScale = 0;            
-        }
-
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            LoadNextLevel();
-        }
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            if (levelManager.levelNo > 0)
+            if (gameState == GameState.GamePlay)
             {
-                levelManager.levelNo -= 1;
+                inventoryUI.Hide();
+                inventoryUIVisible = false;
+                Cursor.lockState = CursorLockMode.None;
+                gameState = GameState.MainMenu;
+                mainMenuUI.Show();
+                healthBarUI.Hide();
+                Time.timeScale = 0;
             }
-            RestartLevel();
+            else if (gameState == GameState.MainMenu)
+            {
+                mainMenuUI.Hide();
+            }
+            else if (gameState == GameState.LoadMenu)
+            {
+                mainMenuUI.loadUI.Hide();
+                gameState = GameState.MainMenu;
+            }
+            else if (gameState == GameState.SaveMenu)
+            {
+                mainMenuUI.saveUI.Hide();
+                gameState = GameState.MainMenu;
+            }
         }
+        
+        
         if ((gameState == GameState.GamePlay || gameState == GameState.InventoryUI) 
             && Input.GetKeyDown(KeyCode.I))
         {
@@ -121,8 +126,7 @@ public class GameDirector : MonoBehaviour
         victoryUI.Show();
         gameState = GameState.VictoryUI;
         levelUI.Hide();
-        //SaveSystem.SaveData("start", levelManager.levelNo+1, 1, Vector3.zero);
-        PlayerPrefs.SetInt("LastLevel", levelManager.levelNo);
+        SaveSystem.SaveData("start", levelManager.levelNo+1, 1, Vector3.zero, false);
     }
 }
 public enum GameState
@@ -132,4 +136,6 @@ public enum GameState
     FailUI,
     GamePlay,
     InventoryUI,
+    LoadMenu,
+    SaveMenu,
 }

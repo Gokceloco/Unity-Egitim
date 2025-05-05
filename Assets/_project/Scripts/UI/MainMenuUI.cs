@@ -8,6 +8,9 @@ public class MainMenuUI : MonoBehaviour
     private CanvasGroup _canvasGroup;
     public RectTransform imageRectTransform;
 
+    public SaveUI saveUI;
+    public LoadUI loadUI;
+
     Vector2 vel;
     public float smooth;
 
@@ -42,6 +45,21 @@ public class MainMenuUI : MonoBehaviour
     {
         Hide();
         gameDirector.RestartLevel();
+    }
+
+    public void SaveButtonPressed()
+    {
+        saveUI.Show();
+    }
+
+    public void LoadButtonPressed()
+    {
+        var files = SaveSystem.GetLoadFiles();
+        loadUI.Show(files);
+        foreach (var f in files)
+        {
+            print(f);
+        }
     }
 
     public void QuitButtonPressed()

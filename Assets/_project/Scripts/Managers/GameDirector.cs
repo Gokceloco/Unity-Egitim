@@ -28,6 +28,11 @@ public class GameDirector : MonoBehaviour
         mainMenuUI.Show();
         failUI.Hide();
         victoryUI.Hide();
+        var data = SaveSystem.LoadData("start");
+        if (data != null)
+        {
+            levelManager.levelNo = data.level;
+        }
     }
 
 
@@ -43,19 +48,6 @@ public class GameDirector : MonoBehaviour
             healthBarUI.Hide();
             Time.timeScale = 0;            
         }
-
-        if (Input.GetKeyDown(KeyCode.P))
-        {
-            LoadNextLevel();
-        }
-        if (Input.GetKeyDown(KeyCode.O))
-        {
-            if (levelManager.levelNo > 0)
-            {
-                levelManager.levelNo -= 1;
-            }
-            RestartLevel();
-        }
         if ((gameState == GameState.GamePlay || gameState == GameState.InventoryUI) 
             && Input.GetKeyDown(KeyCode.I))
         {
@@ -69,6 +61,11 @@ public class GameDirector : MonoBehaviour
                 inventoryUI.Show();
                 inventoryUIVisible = true;
             }
+        }
+
+        if (gameState == GameState.GamePlay && Input.GetKeyDown(KeyCode.R))
+        {
+            ResetGameData();
         }
     }
 
@@ -111,8 +108,15 @@ public class GameDirector : MonoBehaviour
     {
         victoryUI.Show();
         gameState = GameState.VictoryUI;
-        levelUI.Hide();
         inventoryUI.Hide();
+        SaveSystem.SaveData("start", levelManager.levelNo + 1, 1, Vector3.zero);
+    }
+
+    void ResetGameData()
+    {
+        SaveSystem.SaveData("start", 1, 1, Vector3.zero);
+        levelManager.levelNo = 1;
+        RestartLevel();
     }
 }
 public enum GameState

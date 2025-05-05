@@ -1,7 +1,4 @@
 using DG.Tweening;
-using Unity.Cinemachine;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -290,6 +287,11 @@ public class Player : MonoBehaviour
             Random.Range(-10f, 10f),
             Random.Range(-10f, 10f));
         weaponContainer.GetComponentInChildren<BoxCollider>().enabled = true;
+    }
+
+    public float GetHealthRatio()
+    {
+        return (float)_currentHealth / startHealth;
     }
 }
 

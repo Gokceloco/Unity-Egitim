@@ -37,9 +37,13 @@ public class InventoryUI : MonoBehaviour
         canvasGroup.DOFade(0, .2f).SetUpdate(true).OnComplete(() =>
         {
             gameObject.SetActive(false);
-            gameDirector.gameState = GameState.GamePlay;
-            });
-        Cursor.lockState = CursorLockMode.Locked;
+            if (gameDirector.gameState != GameState.VictoryUI && gameDirector.gameState != GameState.MainMenu)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                gameDirector.gameState = GameState.GamePlay;
+            }
+        });
+        
     }
 
     public void MachineGunButtonPressed()
